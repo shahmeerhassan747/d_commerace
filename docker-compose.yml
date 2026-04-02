@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hms_saas
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      # Use env vars if present, otherwise fall back to sensible defaults
+      - DB_ENGINE=postgresql+psycopg2
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_NAME=${DB_NAME:-hms_saas}
+      - APP_ENV=development
+      - APP_PORT=8000
+      - SKIP_DB_CHECK=true
+    depends_on:
+      - db
+    volumes:
+      - .:/app:cached
+
+volumes:
+  db_data:
