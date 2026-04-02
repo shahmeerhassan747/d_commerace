@@ -1,0 +1,17 @@
+
+1.get product list -->
+
+ SELECT p.id, p.name, p.price, r.rating, COUNT(r.id) AS review_count
+ FROM reviews r
+ JOIN product p ON r.product_id = p.id
+ GROUP BY p.id, p.name, p.price, r.rating;
+
+2. get specific product details -->
+
+SELECT p.name, p.description, p.price, p.quantity, p.discount, 
+       p.sold, p.custom, p.key_features, r.rating, COUNT(r.id) AS review_count
+FROM product p
+LEFT JOIN reviews r ON r.product_id = p.id
+WHERE p.id = 2
+GROUP BY p.name, p.description, p.price, p.quantity, p.discount, 
+         p.sold, p.custom, p.key_features, r.rating;

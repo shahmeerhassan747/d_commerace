@@ -1,0 +1,5 @@
+shadcnui
+typescript
+tailwindcss
+pnpm and pnpm dlx
+lucide react icons
